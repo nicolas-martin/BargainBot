@@ -1,9 +1,11 @@
 ﻿using System.Web.Http;
 using Autofac;
 using BargainBot.Bot;
+using BargainBot.Jobs;
 using BargainBot.Repositories;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Internals.Fibers;
+using Quartz;
 
 namespace BargainBot
 {
@@ -21,8 +23,9 @@ namespace BargainBot
             //builder.RegisterControllers(typeof(WebApiApplication).Assembly);
             //builder.Update(Conversation.Container);
             //DependencyResolver.SetResolver(new AutofacDependencyResolver(Conversation.Container));
-
+#pragma warning disable 612, 618
             builder.Update(Conversation.Container);
+#pragma warning restore 612, 618
 
         }
     }
@@ -48,6 +51,17 @@ namespace BargainBot
                 .As<IDialog<object>>()
                 .InstancePerDependency();
 
+            builder.RegisterType<AmazonClient>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<DealJob>()
+                .As<IJob>()
+                .SingleInstance();
+
+            builder.RegisterType<JobScheduler>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 

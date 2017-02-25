@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BargainBot.Model;
 
 namespace BargainBot.Repositories
@@ -10,9 +11,9 @@ namespace BargainBot.Repositories
             return obj;
         }
 
-        public User Retreive(Guid id)
+        public User Get(Guid id)
         {
-            throw new NotImplementedException();
+            return new User();
         }
 
         public User Update(User obj)
@@ -21,6 +22,11 @@ namespace BargainBot.Repositories
         }
 
         public void Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<User> Get()
         {
             throw new NotImplementedException();
         }

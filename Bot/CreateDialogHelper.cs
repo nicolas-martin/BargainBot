@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace BargainBot.Bot
 {
-    public static class CreateDialog
+    public static class CreateDialogHelper
     {
 
         public static async Task CreateDialogFromMessage(string messageText, string incMessageServiceUrl, ChannelAccount botAccount, ChannelAccount userAccount)
@@ -44,6 +44,7 @@ namespace BargainBot.Bot
             reply.Text = "Hey! I have more *exciting news*! Come back!";
 
             //await client.Conversations.ReplyToActivityAsync(reply);
+            //TODO: Do I need to start a new dialog from here or can I just display the Card?
             var newConvo = await client.Conversations.CreateDirectConversationAsync(messageactivity.Recipient, messageactivity.From, reply);
             messageactivity.Conversation.Id = newConvo.Id;
 

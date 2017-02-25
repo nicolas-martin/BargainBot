@@ -15,9 +15,12 @@ namespace BargainBot.Jobs
             // get a scheduler, start the schedular before triggers or anything else
             _scheduler = stdSchedulerFactory.GetScheduler();
             _scheduler.Start();
+
+            //TODO: Does this auto start?
+            Register();
         }
 
-        //TODO: Add deal object as parameter?
+        //Can add object as parameter here if needed.
         public void Register()
         {
 

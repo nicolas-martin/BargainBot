@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BargainBot.Model;
 
 namespace BargainBot.Repositories
@@ -25,7 +26,7 @@ namespace BargainBot.Repositories
             return _deal;
         }
 
-        public Deal Retreive(Guid id)
+        public Deal Get(Guid id)
         {
             return _deal;
         }
@@ -45,6 +46,13 @@ namespace BargainBot.Repositories
             return _deal;
         }
 
+        public List<Deal> Get()
+        {
+            return new List<Deal>
+            {
+                _deal
+            };
+        }
     }
 
     public interface IDealRepository : IRepository<Deal>
