@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using BargainBot.Bot;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 

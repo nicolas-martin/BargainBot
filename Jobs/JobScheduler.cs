@@ -5,15 +5,21 @@ namespace BargainBot.Jobs
 {
     public class JobScheduler
     {
+        private IScheduler _scheduler;
+
+        public JobScheduler()
+        {
+            // construct a scheduler factory
+            var stdSchedulerFactory = new StdSchedulerFactory();
+
+            // get a scheduler, start the schedular before triggers or anything else
+            _scheduler = stdSchedulerFactory.GetScheduler();
+            _scheduler.Start();
+        }
+
         //TODO: Add deal object as parameter?
         public void Register()
         {
-            // construct a scheduler factory
-            var _schedFact = new StdSchedulerFactory();
-
-            // get a scheduler, start the schedular before triggers or anything else
-            var sched = _schedFact.GetScheduler();
-            sched.Start();
 
             var jobData = new JobDataMap
             {
@@ -33,7 +39,7 @@ namespace BargainBot.Jobs
                 .Build();
 
             // Schedule the job using the job and trigger 
-            sched.ScheduleJob(dealJob, trigger);
+            _scheduler.ScheduleJob(dealJob, trigger);
         }
     }
 }

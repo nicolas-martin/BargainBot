@@ -1,4 +1,5 @@
-﻿using BargainBot.Model;
+﻿using BargainBot.Jobs;
+using BargainBot.Model;
 using BargainBot.Repositories;
 
 namespace BargainBot
@@ -6,11 +7,13 @@ namespace BargainBot
     public class TaskHelper
     {
         private IDealRepository _dealRepository;
+        private readonly JobScheduler _scheduler;
         private static AmazonClient _amazonClient;
 
-        public TaskHelper(AmazonClient amazonClient, IDealRepository dealRepository)
+        public TaskHelper(AmazonClient amazonClient, IDealRepository dealRepository, JobScheduler scheduler)
         {
             _dealRepository = dealRepository;
+            _scheduler = scheduler;
             _amazonClient = amazonClient;
         }
 
@@ -27,7 +30,8 @@ namespace BargainBot
                 _dealRepository.Create(updatedDeal);
 
                 // Add a task
-                //TODO: Create quartz task
+                //TODO: Create quartz task for each or for everything?
+
             }
             else
             {

@@ -145,7 +145,8 @@
   <ItemGroup>
     <Compile Include="AmazonClient.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="CardsDialog.cs" />
+    <Compile Include="Bot\CardsDialog.cs" />
+    <Compile Include="Bot\CreateDialog.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

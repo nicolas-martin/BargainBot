@@ -23,7 +23,7 @@ namespace BargainBot
                 AWSSecretKey = AwsSecretKey,
                 AWSAssociateTag = AwsAssociateTag,
                 //http://docs.aws.amazon.com/AWSECommerceService/latest/DG/SOAPEndpoints.html
-                AWSServerUri = "webservices.amazon.co.uk"
+                AWSServerUri = "webservices.amazon.ca"
             });
 
             return client;
