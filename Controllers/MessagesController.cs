@@ -2,8 +2,11 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Autofac;
 using BargainBot.Bot;
+using BargainBot.Repositories;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Connector;
 
 namespace BargainBot.Controllers
@@ -19,7 +22,13 @@ namespace BargainBot.Controllers
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new CardsDialog());
+                using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, activity))
+                {
+                    var dialog = scope.Resolve<IDialog<object>>();
+
+                    await Conversation.SendAsync(activity, () => dialog);
+                }
+
             }
             else
             {

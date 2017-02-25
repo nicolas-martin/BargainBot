@@ -5,6 +5,11 @@ namespace BargainBot.Repositories
 {
     public class DealRepository : IDealRepository
     {
+        public DealRepository()
+        {
+
+        }
+
         private Deal _deal = new Deal
         {
             Id = Guid.NewGuid(),
