@@ -151,13 +151,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Jobs\AutofacJobScheduler.cs" />
     <Compile Include="Jobs\DealJob.cs" />
     <Compile Include="Jobs\JobScheduler.cs" />
     <Compile Include="Model\Deal.cs" />
+    <Compile Include="Model\IIdentifiable.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DealRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\PagedResult.cs" />
+    <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace BargainBot.Model
 {
-    public class Deal : ICloneable
+    public class Deal : ICloneable, IIdentifiable
     {
         public Guid Id { get; set; }
         public string Code { get; set; }

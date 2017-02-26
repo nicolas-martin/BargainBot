@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using Autofac;
+using Quartz;
 using Quartz.Impl;
 
 namespace BargainBot.Jobs
@@ -7,7 +8,7 @@ namespace BargainBot.Jobs
     {
         private IScheduler _scheduler;
 
-        public JobScheduler()
+        public JobScheduler(ILifetimeScope container)
         {
             // construct a scheduler factory
             var stdSchedulerFactory = new StdSchedulerFactory();
@@ -16,7 +17,9 @@ namespace BargainBot.Jobs
             _scheduler = stdSchedulerFactory.GetScheduler();
             _scheduler.Start();
 
-            //TODO: Does this auto start?
+            var sched = new StdSchedulerFactory().GetScheduler();
+            sched.JobFactory = new AutofacJobScheduler(container);
+
             Register();
         }
 
@@ -29,7 +32,7 @@ namespace BargainBot.Jobs
                 {"k", "hey it's a string object"}
             };
 
-            // create job
+            //TODO: Problem with creating a DealJob with autofac
             var dealJob = JobBuilder.Create<DealJob>()
                     .WithIdentity("dealJob", "group1")
                     .SetJobData(jobData)

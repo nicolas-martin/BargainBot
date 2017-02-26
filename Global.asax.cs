@@ -2,6 +2,7 @@
 using Autofac;
 using BargainBot.Bot;
 using BargainBot.Jobs;
+using BargainBot.Model;
 using BargainBot.Repositories;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Internals.Fibers;
@@ -27,6 +28,7 @@ namespace BargainBot
             builder.Update(Conversation.Container);
 #pragma warning restore 612, 618
 
+
         }
     }
 
@@ -35,15 +37,14 @@ namespace BargainBot
     {
         protected override void Load(ContainerBuilder builder)
         {
-            base.Load(builder);
 
             builder.RegisterType<DealRepository>()
-                .Keyed<IDealRepository>(FiberModule.Key_DoNotSerialize)
+                .Keyed<IRepository<Deal>>(FiberModule.Key_DoNotSerialize)
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
             builder.RegisterType<UserRepository>()
-                .Keyed<IUserRepository>(FiberModule.Key_DoNotSerialize)
+                .Keyed<IRepository<User>>(FiberModule.Key_DoNotSerialize)
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -59,9 +60,14 @@ namespace BargainBot
                 .As<IJob>()
                 .SingleInstance();
 
+            //Doesn't actually work
             builder.RegisterType<JobScheduler>()
-                .AsImplementedInterfaces()
+                .AsSelf()
                 .SingleInstance();
+
+            //var jobScheduler = new JobScheduler(this);
+
+            base.Load(builder);
         }
     }
 

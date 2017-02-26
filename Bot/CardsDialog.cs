@@ -13,9 +13,9 @@ namespace BargainBot.Bot
     [Serializable]
     public class CardsDialog : IDialog<object>
     {
-        private readonly IUserRepository _userRepo;
+        private readonly UserRepository _userRepo;
 
-        public CardsDialog(IUserRepository userRepo)
+        public CardsDialog(UserRepository userRepo)
         {
             _userRepo = userRepo;
         }

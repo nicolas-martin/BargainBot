@@ -1,61 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BargainBot.Model;
 
 namespace BargainBot.Repositories
 {
-    public class DealRepository : IDealRepository
+    public class DealRepository : RepositoryBase<Deal>, IDealRepository
     {
-        public DealRepository()
-        {
-
-        }
-
-        private Deal _deal = new Deal
-        {
-            Id = Guid.NewGuid(),
-            Code = "123",
-            DateCreated = DateTime.Now,
-            Name = "TestItem",
-            Price = 13.37,
-            Url = new Uri("https://www.amazon.ca/Timex-T49905GP-Expedition-Chronograph-Genuine/dp/B009MMINJ2/ref=lp_15610772011_1_1?s=watch&ie=UTF8&qid=1488000037&sr=1-1")
-        };
-
-        public Deal Create(Deal obj)
-        {
-            return _deal;
-        }
-
-        public Deal Get(Guid id)
-        {
-            return _deal;
-        }
-
-        public Deal Update(Deal obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        private List<Deal> _deals;
 
         public Deal GetByCode(string code)
         {
-            return _deal;
-        }
-
-        public List<Deal> Get()
-        {
-            return new List<Deal>
-            {
-                _deal
-            };
+            return _deals.FirstOrDefault(x => x.Code == code);
         }
     }
 
-    public interface IDealRepository : IRepository<Deal>
+    internal interface IDealRepository
     {
         Deal GetByCode(string code);
     }

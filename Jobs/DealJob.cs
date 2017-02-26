@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using BargainBot.Bot;
 using BargainBot.Model;
 using BargainBot.Repositories;
@@ -8,12 +9,12 @@ namespace BargainBot.Jobs
 {
     public class DealJob : IJob
     {
-        private IDealRepository _dealRepo;
-        private IUserRepository _userRepo;
+        private IRepository<Deal> _dealRepo;
+        private IRepository<User> _userRepo;
         private AmazonClient _amazonClient;
 
         //TODO: Possible problem with injection, it gets created by a JobBuilder.
-        public DealJob(AmazonClient amazonClient, IDealRepository dealRepo, IUserRepository userRepo)
+        public DealJob(AmazonClient amazonClient, IRepository<Deal> dealRepo, IRepository<User> userRepo)
         {
             _dealRepo = dealRepo;
             _userRepo = userRepo;
@@ -26,7 +27,7 @@ namespace BargainBot.Jobs
             var liveDeals = _dealRepo.Get();
 
             //var obj = context.JobDetail.JobDataMap["k"];
-            Console.WriteLine("Parsing deals...");
+            Debug.WriteLine("Parsing deals.");
 
             foreach (var liveDeal in liveDeals)
             {
