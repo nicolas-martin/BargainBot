@@ -30,6 +30,9 @@ namespace BargainBot
             builder.Update(Conversation.Container);
 #pragma warning restore 612, 618
 
+            //TODO: I know this is bad
+            //var myScheduler = scope.Resolve<JobScheduler>();
+
         }
     }
 
