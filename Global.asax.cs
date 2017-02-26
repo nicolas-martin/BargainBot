@@ -7,6 +7,8 @@ using BargainBot.Repositories;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 
 namespace BargainBot
 {
@@ -28,7 +30,6 @@ namespace BargainBot
             builder.Update(Conversation.Container);
 #pragma warning restore 612, 618
 
-
         }
     }
 
@@ -40,11 +41,12 @@ namespace BargainBot
 
             builder.RegisterType<DealRepository>()
                 .Keyed<IRepository<Deal>>(FiberModule.Key_DoNotSerialize)
-                .AsImplementedInterfaces()
+                .As<IRepository<Deal>>()
                 .SingleInstance();
 
             builder.RegisterType<UserRepository>()
                 .Keyed<IRepository<User>>(FiberModule.Key_DoNotSerialize)
+                .As<IRepository<User>>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -56,16 +58,25 @@ namespace BargainBot
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            //TODO: Fix the life cycles of this shit
             builder.RegisterType<DealJob>()
-                .As<IJob>()
-                .SingleInstance();
+                .AsSelf();
+                //.As<IJob>()
+                //.SingleInstance();
 
-            //Doesn't actually work
+            builder.RegisterType<AutofacJobScheduler>()
+                .As<IJobFactory>();
+
             builder.RegisterType<JobScheduler>()
-                .AsSelf()
-                .SingleInstance();
+                .AsSelf();
 
-            //var jobScheduler = new JobScheduler(this);
+            builder.Register(c =>
+            {
+                var scheduler = new StdSchedulerFactory().GetScheduler();
+                scheduler.JobFactory = c.Resolve<IJobFactory>();
+                return scheduler;
+            });
+
 
             base.Load(builder);
         }
