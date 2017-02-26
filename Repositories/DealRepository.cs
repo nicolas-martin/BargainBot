@@ -1,16 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BargainBot.Model;
 
 namespace BargainBot.Repositories
 {
     public class DealRepository : RepositoryBase<Deal>, IDealRepository
     {
-        private List<Deal> _deals;
+        public DealRepository() : base()
+        {
+        }
 
+        //Don't really have to do this but it's nice
         public Deal GetByCode(string code)
         {
-            return _deals.FirstOrDefault(x => x.Code == code);
+            return Find(x => x.Code == code).FirstOrDefault();
         }
     }
 

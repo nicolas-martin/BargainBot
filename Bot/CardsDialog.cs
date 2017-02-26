@@ -55,8 +55,6 @@ namespace BargainBot.Bot
                     Deals = new List<Deal> { deal }
                 });
 
-                //TODO: Faking job execution
-
             }
         }
     }

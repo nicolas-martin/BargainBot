@@ -8,19 +8,19 @@ namespace BargainBot.Jobs
     {
         private IScheduler _scheduler;
 
-        public JobScheduler(ILifetimeScope container)
+        public JobScheduler(IScheduler scheduler)
         {
+            _scheduler = scheduler;
             // construct a scheduler factory
-            var stdSchedulerFactory = new StdSchedulerFactory();
+            //var stdSchedulerFactory = new StdSchedulerFactory();
 
             // get a scheduler, start the schedular before triggers or anything else
-            _scheduler = stdSchedulerFactory.GetScheduler();
-            _scheduler.Start();
-
-            var sched = new StdSchedulerFactory().GetScheduler();
-            sched.JobFactory = new AutofacJobScheduler(container);
+            //_scheduler = stdSchedulerFactory.GetScheduler();
+            //_scheduler.Start();
 
             Register();
+
+            _scheduler.Start();
         }
 
         //Can add object as parameter here if needed.
@@ -32,7 +32,6 @@ namespace BargainBot.Jobs
                 {"k", "hey it's a string object"}
             };
 
-            //TODO: Problem with creating a DealJob with autofac
             var dealJob = JobBuilder.Create<DealJob>()
                     .WithIdentity("dealJob", "group1")
                     .SetJobData(jobData)

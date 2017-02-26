@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
 using BargainBot.Bot;
+using BargainBot.Jobs;
 using BargainBot.Repositories;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Internals;
@@ -27,6 +28,9 @@ namespace BargainBot.Controllers
                     var dialog = scope.Resolve<IDialog<object>>();
 
                     await Conversation.SendAsync(activity, () => dialog);
+
+                    //TODO: I know this is bad
+                    var myScheduler = scope.Resolve<JobScheduler>();
                 }
 
             }
