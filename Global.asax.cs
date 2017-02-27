@@ -29,9 +29,9 @@ namespace BargainBot
 #pragma warning disable 612, 618
             builder.Update(Conversation.Container);
 #pragma warning restore 612, 618
-
+            
             //TODO: I know this is bad
-            //var myScheduler = scope.Resolve<JobScheduler>();
+            var myScheduler = Conversation.Container.Resolve<JobScheduler>();
 
         }
     }
@@ -58,7 +58,7 @@ namespace BargainBot
                 .InstancePerDependency();
 
             builder.RegisterType<AmazonClient>()
-                .AsImplementedInterfaces()
+                .AsSelf()
                 .SingleInstance();
 
             //TODO: Fix the life cycles of this shit
