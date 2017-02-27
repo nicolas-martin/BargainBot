@@ -147,10 +147,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Bot\CardsDialog.cs" />
     <Compile Include="Bot\CreateDialogHelper.cs" />
+    <Compile Include="Client\BitlyClient.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\Constants.cs" />
     <Compile Include="Helper\UrlValidator.cs" />
     <Compile Include="Jobs\AutofacJobScheduler.cs" />
     <Compile Include="Jobs\DealJob.cs" />

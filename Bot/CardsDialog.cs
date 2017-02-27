@@ -90,8 +90,8 @@ namespace BargainBot.Bot
                 Title = "Nice stuff",
                 Subtitle = $"The asin is {deal.Code}",
                 Text = "We will monitor your item and notify you when it becomes discounted",
-                Images = new List<CardImage> { new CardImage("https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg") },
-                Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "View item", value: "https://docs.botframework.com/en-us/") }
+                Images = new List<CardImage> { new CardImage(deal.ImageUrl) },
+                Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "View item", value: deal.ShortenUrl) }
             };
 
             return heroCard.ToAttachment();

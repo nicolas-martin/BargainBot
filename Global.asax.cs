@@ -60,6 +60,10 @@ namespace BargainBot
                 .AsSelf()
                 .SingleInstance();
 
+            builder.RegisterType<BitlyClient>()
+                .AsSelf()
+                .SingleInstance();
+
             //TODO: Fix the life cycles of this shit
             builder.RegisterType<DealJob>()
                 .AsSelf();

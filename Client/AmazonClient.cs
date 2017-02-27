@@ -7,13 +7,17 @@ namespace BargainBot.Client
 {
     public class AmazonClient
     {
+        private readonly BitlyClient _bitlyClient;
+
+        //TODO: Find a secure way to store these
         private static readonly string AwsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
         private static readonly string AwsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
         private static readonly string AwsAssociateTag = Environment.GetEnvironmentVariable("AWS_ASSOCIATE_TAG");
         private AwsProductApiClient _awsProductApiClient;
 
-        public AmazonClient()
+        public AmazonClient(BitlyClient bitlyClient)
         {
+            _bitlyClient = bitlyClient;
             _awsProductApiClient = new AwsProductApiClient(new ProductApiConnectionInfo
             {
                 AWSAccessKey = AwsAccessKey,
@@ -34,6 +38,8 @@ namespace BargainBot.Client
         {
             var amazonItem = _awsProductApiClient.ItemLookupByAsin(asin);
 
+            var shortenRefUrl = _bitlyClient.ShortenAndAddRefToUrl(amazonItem.DetailPageURL);
+
             return new Deal
             {
                 Id = Guid.NewGuid(),
@@ -41,7 +47,8 @@ namespace BargainBot.Client
                 Code = amazonItem.ASIN,
                 Price = amazonItem.OfferPrice,
                 DateCreated = DateTime.UtcNow,
-                Url = new Uri(amazonItem.DetailPageURL),
+                Url = amazonItem.DetailPageURL,
+                ShortenUrl = shortenRefUrl,
                 ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault().URL
             };
         }
