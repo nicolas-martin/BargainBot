@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using Autofac;
 using BargainBot.Bot;
+using BargainBot.Client;
 using BargainBot.Jobs;
 using BargainBot.Model;
 using BargainBot.Repositories;
@@ -22,7 +23,6 @@ namespace BargainBot
 
             builder.RegisterModule<BargainBotModule>();
 
-            //TODO: ?
             //builder.RegisterControllers(typeof(WebApiApplication).Assembly);
             //builder.Update(Conversation.Container);
             //DependencyResolver.SetResolver(new AutofacDependencyResolver(Conversation.Container));
@@ -30,7 +30,6 @@ namespace BargainBot
             builder.Update(Conversation.Container);
 #pragma warning restore 612, 618
             
-            //TODO: I know this is bad
             var myScheduler = Conversation.Container.Resolve<JobScheduler>();
 
         }

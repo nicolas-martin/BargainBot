@@ -7,11 +7,11 @@ namespace BargainBot.Repositories
 {
     public abstract class RepositoryBase<T> : IRepository<T> where T : IIdentifiable
     {
-        private List<T> _list;
+        internal List<T> List;
 
         protected RepositoryBase()
         {
-            _list = new List<T>();
+            List = new List<T>();
         }
 
         public PagedResult<T> RetrievePage(int pageNumber, int pageSize, Func<T, bool> predicate = default(Func<T, bool>))
@@ -27,18 +27,18 @@ namespace BargainBot.Repositories
 
         public T Create(T obj)
         {
-            _list.Add(obj);
+            List.Add(obj);
             return obj;
         }
 
         public T Get(Guid id)
         {
-            return _list.FirstOrDefault(x => x.Id == id);
+            return List.FirstOrDefault(x => x.Id == id);
         }
 
         public List<T> Get()
         {
-            return _list;
+            return List;
         }
 
         public T Update(T obj)
@@ -50,12 +50,12 @@ namespace BargainBot.Repositories
         {
             var obj = Get(id);
 
-            _list?.Remove(obj);
+            List?.Remove(obj);
         }
 
         public IEnumerable<T> Find(Func<T, bool> predicate)
         {
-            return predicate != default(Func<T, bool>) ? this._list.Where(predicate) : this._list;
+            return predicate != default(Func<T, bool>) ? this.List.Where(predicate) : this.List;
         }
 
     }

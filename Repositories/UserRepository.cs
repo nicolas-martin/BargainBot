@@ -4,8 +4,9 @@ namespace BargainBot.Repositories
 {
     public class UserRepository : RepositoryBase<User>, IUserRepository
     {
-        public UserRepository() : base()
+        public UserRepository()
         {
+            
         }
     }
 
