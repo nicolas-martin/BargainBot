@@ -37,7 +37,7 @@ namespace BargainBot.Client
         {
             var amazonItem = _awsProductApiClient.ItemLookupByAsin(asin);
 
-            var shortenRefUrl = _bitlyClient.ShortenAndAddRefToUrl(amazonItem.DetailPageURL);
+            var shortenedAndTaggedUrl = _bitlyClient.ShortenAndAddTagToUrl(amazonItem.DetailPageURL);
 
             return new Deal
             {
@@ -47,7 +47,7 @@ namespace BargainBot.Client
                 Price = amazonItem.OfferPrice,
                 DateCreated = DateTime.UtcNow,
                 Url = amazonItem.DetailPageURL,
-                ShortenUrl = shortenRefUrl,
+                ShortenUrl = shortenedAndTaggedUrl,
                 ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault().URL
             };
         }

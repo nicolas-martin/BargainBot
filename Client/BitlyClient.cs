@@ -16,7 +16,7 @@ namespace BargainBot.Client
             _bitlyService = new BitlyService(_account, _apiKey);
         }
 
-        public string ShortenAndAddRefToUrl(string url)
+        public string ShortenAndAddTagToUrl(string url)
         {
             var uriBuilder = new UriBuilder(url);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
