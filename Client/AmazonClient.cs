@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using BargainBot.Model;
 using NKCraddock.AmazonItemLookup.Client;
 
 namespace BargainBot.Client
@@ -26,6 +28,22 @@ namespace BargainBot.Client
         {
             //TODO: Could also get the image to display in the card. Create new class to hold properties
             return _awsProductApiClient.ItemLookupByAsin(asin).OfferPrice;
+        }
+
+        public Deal GetDeal(string asin)
+        {
+            var amazonItem = _awsProductApiClient.ItemLookupByAsin(asin);
+
+            return new Deal
+            {
+                Id = Guid.NewGuid(),
+                Name = "??" + amazonItem.Description,
+                Code = amazonItem.ASIN,
+                Price = amazonItem.OfferPrice,
+                DateCreated = DateTime.UtcNow,
+                Url = new Uri(amazonItem.DetailPageURL),
+                ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault().URL
+            };
         }
     }
 }

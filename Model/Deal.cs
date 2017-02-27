@@ -10,6 +10,7 @@ namespace BargainBot.Model
         public double? Price { get; set; }
         public Uri Url { get; set; }
         public DateTime DateCreated { get; set; }
+        public string ImageUrl { get; set; }
 
         public object Clone()
         {
