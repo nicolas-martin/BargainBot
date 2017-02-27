@@ -22,23 +22,14 @@ namespace BargainBot.Client
             var uriBuilder = new UriBuilder(url);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
-            var testPath = uriBuilder.Path;
-            var replaced = "";
-
-            if (testPath.Contains("ref="))
-            {
-                var refEqPos = testPath.IndexOf("ref=", StringComparison.Ordinal);
-                replaced = testPath.Replace(testPath.Substring(refEqPos, testPath.Length - refEqPos), $"ref={Constants.Referral}");
-            }
-            else
-            {
-                replaced = testPath + $"ref={Constants.Referral}";
-            }
-
+            query["tag"] = Constants.Referral;
 
             uriBuilder.Query = query.ToString();
-            uriBuilder.Path = replaced;
+
+            //TODO: Validate that it works 
+            //https://affiliate-program.amazon.com/home/tools/linkchecker
             var endUrl = uriBuilder.ToString();
+
             var shortedEndUrl = "";
 
             if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
