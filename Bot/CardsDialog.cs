@@ -6,7 +6,6 @@ using BargainBot.Helper;
 using BargainBot.Model;
 using BargainBot.Repositories;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
 using Quartz.Util;
@@ -18,11 +17,13 @@ namespace BargainBot.Bot
     {
         private readonly IRepository<User> _userRepo;
         private readonly AmazonClient _amazonClient;
+        private ResumptionCookie _cookie;
 
         public CardsDialog(IRepository<User> userRepo, AmazonClient amazonClient)
         {
             _userRepo = userRepo;
             _amazonClient = amazonClient;
+            _cookie = null;
         }
 
         public async Task StartAsync(IDialogContext context)
@@ -33,6 +34,11 @@ namespace BargainBot.Bot
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var incMessage = await result;
+
+            if (_cookie == null)
+            {
+                _cookie = new ResumptionCookie(incMessage);
+            }
 
             PromptDialog.Text(
                 context,
@@ -54,25 +60,21 @@ namespace BargainBot.Bot
             }
 
             var message = context.MakeMessage();
-            var item = _amazonClient
+            var item = _amazonClient.GetDeal(asin);
 
-            message.Attachments.Add(CreateDealCard(asin));
+            message.Attachments.Add(CreateDealCard(item));
 
             await context.PostAsync(message);
 
-            //TODO: Create deal and user in repo 
-            //var resume = new ResumptionCookie(incMessage);
+            var data = JsonConvert.SerializeObject(_cookie);
 
-            //var data = JsonConvert.SerializeObject(resume);
-
-            //_userRepo.Create(new User
-            //{
-            //    Id = Guid.NewGuid(),
-            //    ResumptionCookie = data,
-            //    Name = resume.UserName,
-            //    Deals = new List<Deal> { deal }
-            //});
-
+            _userRepo.Create(new User
+            {
+                Id = Guid.NewGuid(),
+                ResumptionCookie = data,
+                Name = _cookie.UserName,
+                Deals = new List<Deal> { item }
+            });
 
             //TODO: Where should the dialog go from here?
             context.Wait(this.MessageReceivedAsync);
