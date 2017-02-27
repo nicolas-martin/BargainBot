@@ -1,7 +1,20 @@
-﻿namespace BargainBot.Helper
+﻿using System.Configuration;
+
+namespace BargainBot.Helper
 {
-    public class Constants
+    public static class Constants
     {
-        public const string Referral = "hellohellohello123";
+        public static class Bitly
+        {
+            public static readonly string Account = ConfigurationManager.AppSettings["BitlyAccount"];
+            public static readonly string ApiKey = ConfigurationManager.AppSettings["BitlyApiKey"];
+        }
+
+        public static class Amazon
+        {
+            public static readonly string AccessKey = ConfigurationManager.AppSettings["AmazonAccessKey"];
+            public static readonly string SecretKey = ConfigurationManager.AppSettings["AmazonSecretKey"];
+            public static readonly string AssociateTag = ConfigurationManager.AppSettings["AmazonAssociateTag"];
+        }
     }
 }

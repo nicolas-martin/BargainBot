@@ -2,14 +2,13 @@
 using System.Web;
 using BargainBot.Helper;
 using BitlyDotNET.Implementations;
-using Quartz.Util;
 
 namespace BargainBot.Client
 {
     public class BitlyClient
     {
-        private static string _account = Environment.GetEnvironmentVariable("BITLY_ACCOUNT");
-        private static string _apiKey = Environment.GetEnvironmentVariable("BITLY_KEY");
+        private static string _account = Constants.Bitly.Account;
+        private static string _apiKey = Constants.Bitly.ApiKey;
         private BitlyService _bitlyService;
 
         public BitlyClient()
@@ -22,7 +21,7 @@ namespace BargainBot.Client
             var uriBuilder = new UriBuilder(url);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
-            query["tag"] = Constants.Referral;
+            query["tag"] = Constants.Amazon.AssociateTag;
 
             uriBuilder.Query = query.ToString();
 
@@ -32,7 +31,7 @@ namespace BargainBot.Client
 
             var shortedEndUrl = "";
 
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            if (Uri.IsWellFormedUriString(endUrl, UriKind.Absolute))
             {
                 shortedEndUrl = _bitlyService.Shorten(endUrl);
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using BargainBot.Helper;
 using BargainBot.Model;
 using NKCraddock.AmazonItemLookup.Client;
 
@@ -7,13 +8,12 @@ namespace BargainBot.Client
 {
     public class AmazonClient
     {
-        private readonly BitlyClient _bitlyClient;
+        private static readonly string AwsAccessKey = Constants.Amazon.AccessKey;
+        private static readonly string AwsSecretKey = Constants.Amazon.SecretKey;
+        private static readonly string AwsAssociateTag = Constants.Amazon.AssociateTag;
 
-        //TODO: Find a secure way to store these
-        private static readonly string AwsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
-        private static readonly string AwsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
-        private static readonly string AwsAssociateTag = Environment.GetEnvironmentVariable("AWS_ASSOCIATE_TAG");
         private AwsProductApiClient _awsProductApiClient;
+        private readonly BitlyClient _bitlyClient;
 
         public AmazonClient(BitlyClient bitlyClient)
         {
@@ -30,7 +30,6 @@ namespace BargainBot.Client
 
         public double? GetPriceByAsin(string asin)
         {
-            //TODO: Could also get the image to display in the card. Create new class to hold properties
             return _awsProductApiClient.ItemLookupByAsin(asin).OfferPrice;
         }
 
