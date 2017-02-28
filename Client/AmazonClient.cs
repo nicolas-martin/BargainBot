@@ -2,6 +2,7 @@
 using System.Linq;
 using BargainBot.Helper;
 using BargainBot.Model;
+using NKCraddock.AmazonItemLookup;
 using NKCraddock.AmazonItemLookup.Client;
 
 namespace BargainBot.Client
@@ -50,7 +51,7 @@ namespace BargainBot.Client
                 DateCreated = DateTime.UtcNow,
                 Url = amazonItem.DetailPageURL,
                 ShortenUrl = shortenedAndTaggedUrl,
-                ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault().URL
+                ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault(x => x.Type == AwsImageType.MediumImage)?.URL
             };
         }
     }
