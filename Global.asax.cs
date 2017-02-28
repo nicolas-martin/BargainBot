@@ -57,6 +57,7 @@ namespace BargainBot
                 .InstancePerDependency();
 
             builder.RegisterType<AmazonClient>()
+                .Keyed<AmazonClient>(FiberModule.Key_DoNotSerialize)
                 .AsSelf()
                 .SingleInstance();
 
