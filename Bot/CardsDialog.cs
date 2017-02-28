@@ -82,9 +82,6 @@ namespace BargainBot.Bot
 
         private static Attachment CreateDealCard(Deal deal)
         {
-
-            //TODO: Fetch deal data from amazon.
-
             var heroCard = new HeroCard
             {
                 Title = "Nice stuff",

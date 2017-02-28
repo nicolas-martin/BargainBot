@@ -34,7 +34,7 @@ namespace BargainBot.Jobs
                 updatedDeal.Price = _amazonClient.GetPriceByAsin(liveDeal.Code);
 
                 // Check to see if cheaper
-                if (liveDeal.Price < updatedDeal.Price)
+                if (updatedDeal.Price < liveDeal.Price)
                 {
                     var users = _userRepo.Get();
 

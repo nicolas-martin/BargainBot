@@ -15,6 +15,7 @@ namespace BargainBot.Client
         private AwsProductApiClient _awsProductApiClient;
         private readonly BitlyClient _bitlyClient;
 
+        //Test out stuff here http://webservices.amazon.com/scratchpad/index.html
         public AmazonClient(BitlyClient bitlyClient)
         {
             _bitlyClient = bitlyClient;
@@ -24,7 +25,8 @@ namespace BargainBot.Client
                 AWSSecretKey = AwsSecretKey,
                 AWSAssociateTag = AwsAssociateTag,
                 //http://docs.aws.amazon.com/AWSECommerceService/latest/DG/SOAPEndpoints.html
-                AWSServerUri = "webservices.amazon.ca"
+                //TODO: weird can only use my credentials on .com
+                AWSServerUri = "webservices.amazon.com"
             });
         }
 
