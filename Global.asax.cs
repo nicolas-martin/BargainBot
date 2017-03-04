@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Autofac;
+using Autofac.Core;
 using BargainBot.Bot;
 using BargainBot.Client;
 using BargainBot.Jobs;
@@ -32,14 +33,23 @@ namespace BargainBot
             
             var myScheduler = Conversation.Container.Resolve<JobScheduler>();
 
+            //using (var context = new MyContext())
+            //{
+            //    // Create database
+            //    context.Database.EnsureCreated();
+
+
+            //}
         }
     }
-
 
     public class BargainBotModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<MyContext>()
+                .As<MyContext>()
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<DealRepository>()
                 .Keyed<IRepository<Deal>>(FiberModule.Key_DoNotSerialize)
