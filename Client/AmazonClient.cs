@@ -47,7 +47,8 @@ namespace BargainBot.Client
                 Id = Guid.NewGuid(),
                 Name = amazonItem.ItemAttributes.FirstOrDefault(x => x.Key.Equals(Constants.Amazon.ItemAttribute.Title)).Value,
                 Code = amazonItem.ASIN,
-                Price = amazonItem.OfferPrice,
+                //TODO: Sometimes the offer price is null?
+                Price = amazonItem.OfferPrice ?? amazonItem.ListPrice,
                 DateCreated = DateTime.UtcNow,
                 ShortenUrl = shortenedAndTaggedUrl,
                 ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault(x => x.Type == AwsImageType.MediumImage)?.URL

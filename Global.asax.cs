@@ -24,22 +24,16 @@ namespace BargainBot
 
             builder.RegisterModule<BargainBotModule>();
 
-            //builder.RegisterControllers(typeof(WebApiApplication).Assembly);
-            //builder.Update(Conversation.Container);
-            //DependencyResolver.SetResolver(new AutofacDependencyResolver(Conversation.Container));
 #pragma warning disable 612, 618
             builder.Update(Conversation.Container);
 #pragma warning restore 612, 618
-            
-            //var myScheduler = Conversation.Container.Resolve<JobScheduler>();
 
-            //using (var context = new MyContext())
-            //{
-            //    // Create database
-            //    context.Database.EnsureCreated();
+            var myScheduler = Conversation.Container.Resolve<JobScheduler>();
 
-
-            //}
+            using (var context = new MyContext())
+            {
+                context.Database.EnsureCreated();
+            }
         }
     }
 
@@ -75,12 +69,9 @@ namespace BargainBot
                 .AsSelf()
                 .SingleInstance();
 
-            ////TODO: Fix the life cycles of this shit
             builder.RegisterType<DealJob>()
                 .AsSelf()
                 .SingleInstance();
-            //.As<IJob>()
-            //.SingleInstance();
 
             builder.RegisterType<AutofacJobScheduler>()
                 .As<IJobFactory>()
@@ -96,7 +87,6 @@ namespace BargainBot
                 scheduler.JobFactory = c.Resolve<IJobFactory>();
                 return scheduler;
             });
-
 
             base.Load(builder);
         }

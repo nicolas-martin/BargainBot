@@ -17,7 +17,7 @@ namespace BargainBot.Helper
             public static readonly string AssociateTag = ConfigurationManager.AppSettings["AmazonAssociateTag"];
 
             //TODO: Find a more reliable way to get these.
-            public static readonly string FlakyImageUrlPattern = "http://images.amazon.com/images/P/{deal.Code}.01._SCMZZZZZZZ_.jpg";
+            public static readonly string FlakyImageUrlPattern = "http://images.amazon.com/images/P/{0}.01._SCMZZZZZZZ_.jpg";
 
             public static class ItemAttribute
             {

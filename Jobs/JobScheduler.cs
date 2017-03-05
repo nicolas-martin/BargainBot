@@ -40,7 +40,7 @@ namespace BargainBot.Jobs
             // create trigger
             var trigger = TriggerBuilder.Create()
                 .WithIdentity("60SecondsTrigger", "group1")
-                .WithSimpleSchedule(x => x.WithIntervalInSeconds(30).RepeatForever())
+                .WithSimpleSchedule(x => x.WithIntervalInSeconds(60).RepeatForever())
                 .Build();
 
             // Schedule the job using the job and trigger 

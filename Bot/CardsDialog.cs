@@ -81,12 +81,13 @@ namespace BargainBot.Bot
 
         private static Attachment CreateDealCard(Deal deal)
         {
+            var imgUrl = string.Format(Constants.Amazon.FlakyImageUrlPattern, deal.Code);
             var heroCard = new HeroCard
             {
                 Title = deal.Name,
                 Subtitle = $"Currently sells for {deal.Price}$",
                 Text = "We will monitor your item and notify you when it becomes discounted",
-                Images = new List<CardImage> { new CardImage(string.Format(Constants.Amazon.FlakyImageUrlPattern, deal.Code)) },
+                Images = new List<CardImage> { new CardImage(imgUrl) },
                 Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "View item", value: deal.ShortenUrl) }
             };
 
