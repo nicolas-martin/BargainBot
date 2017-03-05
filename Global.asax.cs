@@ -31,7 +31,7 @@ namespace BargainBot
             builder.Update(Conversation.Container);
 #pragma warning restore 612, 618
             
-            var myScheduler = Conversation.Container.Resolve<JobScheduler>();
+            //var myScheduler = Conversation.Container.Resolve<JobScheduler>();
 
             //using (var context = new MyContext())
             //{
@@ -75,17 +75,20 @@ namespace BargainBot
                 .AsSelf()
                 .SingleInstance();
 
-            //TODO: Fix the life cycles of this shit
+            ////TODO: Fix the life cycles of this shit
             builder.RegisterType<DealJob>()
-                .AsSelf();
-                //.As<IJob>()
-                //.SingleInstance();
+                .AsSelf()
+                .SingleInstance();
+            //.As<IJob>()
+            //.SingleInstance();
 
             builder.RegisterType<AutofacJobScheduler>()
-                .As<IJobFactory>();
+                .As<IJobFactory>()
+                .SingleInstance();
 
             builder.RegisterType<JobScheduler>()
-                .AsSelf();
+                .AsSelf()
+                .SingleInstance();
 
             builder.Register(c =>
             {
