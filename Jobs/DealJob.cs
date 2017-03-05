@@ -47,24 +47,19 @@ namespace BargainBot.Jobs
                 // Check to see if cheaper
                 if ((liveDeal.Price - 1) < liveDeal.Price)
                 {
-                    var users = await _userRepo.FindAsync(x =>
-                    {
-                        Deal first = null;
-                        foreach (var d in x.Deals)
-                        {
-                            if (d.Code == liveDeal.Code)
-                            {
-                                first = d;
-                                break;
-                            }
-                        }
-                        return first;
-                    }).ToListAsync();
+                    var users = _userRepo.Get();
 
                     foreach (var user in users)
                     {
                         //uhhh...
-                        await CreateDialogHelper.CreateDialogFromCookie(user.ResumptionCookie);
+                        try
+                        {
+                            await CreateDialogHelper.CreateDialogFromCookie(user.ResumptionCookie);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e);
+                        }
                     }
 
                 }
