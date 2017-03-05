@@ -70,7 +70,6 @@ namespace BargainBot.Bot
 
             _userRepo.Create(new User
             {
-                Id = Guid.NewGuid(),
                 ResumptionCookie = data,
                 Name = _cookie.UserName,
                 Deals = new List<Deal> { item }
@@ -84,10 +83,10 @@ namespace BargainBot.Bot
         {
             var heroCard = new HeroCard
             {
-                Title = "Nice stuff",
-                Subtitle = $"The asin is {deal.Code}",
+                Title = deal.Name,
+                Subtitle = $"Currently sells for {deal.Price}$",
                 Text = "We will monitor your item and notify you when it becomes discounted",
-                Images = new List<CardImage> { new CardImage(deal.ImageUrl) },
+                Images = new List<CardImage> { new CardImage(string.Format(Constants.Amazon.FlakyImageUrlPattern, deal.Code)) },
                 Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "View item", value: deal.ShortenUrl) }
             };
 

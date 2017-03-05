@@ -45,11 +45,10 @@ namespace BargainBot.Client
             return new Deal
             {
                 Id = Guid.NewGuid(),
-                Name = "??" + amazonItem.Description,
+                Name = amazonItem.ItemAttributes.FirstOrDefault(x => x.Key.Equals(Constants.Amazon.ItemAttribute.Title)).Value,
                 Code = amazonItem.ASIN,
                 Price = amazonItem.OfferPrice,
                 DateCreated = DateTime.UtcNow,
-                Url = amazonItem.DetailPageURL,
                 ShortenUrl = shortenedAndTaggedUrl,
                 ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault(x => x.Type == AwsImageType.MediumImage)?.URL
             };
