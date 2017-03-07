@@ -25,7 +25,7 @@ namespace BargainBot.Client
 
             uriBuilder.Query = query.ToString();
 
-            //TODO: Validate that it works 
+            //Can validate the link
             //https://affiliate-program.amazon.com/home/tools/linkchecker
             var endUrl = uriBuilder.ToString();
 

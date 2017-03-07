@@ -11,6 +11,7 @@ namespace BargainBot.Model
         public DateTime DateCreated { get; set; }
         public string ImageUrl { get; set; }
         public string ShortenUrl { get; set; }
+        public bool IsActive { get; set; }
 
         public Guid UserId { get; set; }
         public User User { get; set; }

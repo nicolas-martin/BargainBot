@@ -26,7 +26,7 @@ namespace BargainBot.Client
                 AWSSecretKey = AwsSecretKey,
                 AWSAssociateTag = AwsAssociateTag,
                 //http://docs.aws.amazon.com/AWSECommerceService/latest/DG/SOAPEndpoints.html
-                //TODO: weird can only use my credentials on .com
+                //TODO: Can only use my credentials on .com
                 AWSServerUri = "webservices.amazon.com"
             });
         }

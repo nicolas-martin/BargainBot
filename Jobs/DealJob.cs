@@ -36,8 +36,7 @@ namespace BargainBot.Jobs
 
         private async void NewMethod()
         {
-            //TODO: Deal != cancelled
-            var liveDeals = await _dealRepo.FindAsync(x => !x.Name.IsNullOrWhiteSpace()).ToListAsync();
+            var liveDeals = await _dealRepo.FindAsync(x => x.IsActive).ToListAsync();
 
             foreach (var liveDeal in liveDeals)
             {
@@ -47,7 +46,7 @@ namespace BargainBot.Jobs
                 // Check to see if cheaper
                 if ((liveDeal.Price - 1) < liveDeal.Price)
                 {
-                    var users = _userRepo.Get();
+                    var users = _userRepo.Get().Where(x => x.Deals.Any(y => y.Code == liveDeal.Code));
 
                     foreach (var user in users)
                     {
