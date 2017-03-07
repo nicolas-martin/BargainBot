@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BargainBot.Client;
 using BargainBot.Helper;
@@ -46,6 +47,23 @@ namespace BargainBot.Bot
                 "Please paste the url of the item you would like to monitor",
                 "Could not validate amazon URL");
 
+        }
+
+        public async Task DisplayLiveDeals(IDialogContext context, IAwaitable<string> result)
+        {
+            var liveUserDeals = _userRepo.Get().FirstOrDefault(x => x.Name == context.Activity.From.ToString());
+            var message = context.MakeMessage();
+            if (liveUserDeals?.Deals != null)
+            {
+                foreach (var deal in liveUserDeals.Deals)
+                {
+                    message.Attachments.Add(CreateDealCard(deal));
+                }
+            }
+            else
+            {
+                message.Text = "Could not find any deals";
+            }
         }
 
         public async Task DisplayConfirmDeal(IDialogContext context, IAwaitable<string> result)
