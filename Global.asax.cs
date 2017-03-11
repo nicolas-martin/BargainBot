@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Diagnostics;
+using System.Web.Http;
 using Autofac;
 using Autofac.Core;
 using BargainBot.Bot;
@@ -32,7 +33,8 @@ namespace BargainBot
 
             using (var context = new MyContext())
             {
-                context.Database.EnsureCreated();
+                var isCreated = context.Database.EnsureCreated();
+                Debug.WriteLine(isCreated ? "Database created" : "Database exists");
             }
         }
     }

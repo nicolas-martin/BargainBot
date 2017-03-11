@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Quartz.Util;
 
@@ -18,6 +19,20 @@ namespace BargainBot.Helper
             }
 
             return "";
+        }
+
+        public static bool IsCountryFromUrlAllowed(string url)
+        {
+            var urlBuilder = new UriBuilder(url);
+            var host = urlBuilder.Host;
+
+            if (host.Split('.').Last() != "com")
+            {
+                return false;
+            }
+
+            return true;
+
         }
     }
 }

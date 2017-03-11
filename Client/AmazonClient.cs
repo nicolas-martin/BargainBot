@@ -51,7 +51,8 @@ namespace BargainBot.Client
                 Price = amazonItem.OfferPrice ?? amazonItem.ListPrice,
                 DateCreated = DateTime.UtcNow,
                 ShortenUrl = shortenedAndTaggedUrl,
-                ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault(x => x.Type == AwsImageType.MediumImage)?.URL
+                ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault(x => x.Type == AwsImageType.MediumImage)?.URL,
+                IsActive = true
             };
         }
     }

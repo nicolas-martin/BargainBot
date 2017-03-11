@@ -41,76 +41,135 @@ namespace BargainBot.Bot
                 _cookie = new ResumptionCookie(incMessage);
             }
 
-            PromptDialog.Text(
-                context,
-                DisplayConfirmDeal,
-                "Please paste the url of the item you would like to monitor",
-                "Could not validate amazon URL");
-
-        }
-
-        public async Task DisplayLiveDeals(IDialogContext context, IAwaitable<string> result)
-        {
-            var liveUserDeals = _userRepo.Get().FirstOrDefault(x => x.Name == context.Activity.From.ToString());
-            var message = context.MakeMessage();
-            if (liveUserDeals?.Deals != null)
+            if (string.Equals(incMessage.Text, "view deals", StringComparison.InvariantCultureIgnoreCase))
             {
-                foreach (var deal in liveUserDeals.Deals)
+                var liveUserDeals = _userRepo.Get().FirstOrDefault(x => x.Name == context.Activity.From.Name);
+
+                if (liveUserDeals?.Deals.Count == 0)
                 {
-                    message.Attachments.Add(CreateDealCard(deal));
+                    var noDealReply = context.MakeMessage();
+                    noDealReply.Text = "No deals found";
+                    await context.PostAsync(noDealReply);
                 }
+                else
+                {
+                    var reply = context.MakeMessage();
+
+                    reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+                    reply.Attachments = GetCardsAttachments(liveUserDeals.Deals);
+
+                    await context.PostAsync(reply);
+                }
+
             }
             else
             {
-                message.Text = "Could not find any deals";
+                PromptDialog.Text(
+                    context,
+                    DisplayConfirmDeal,
+                    "Please paste the url of the item you would like to monitor",
+                    "Could not validate amazon URL");
             }
+
         }
 
         public async Task DisplayConfirmDeal(IDialogContext context, IAwaitable<string> result)
         {
-            var amazonURL = await result;
+            var amazonUrl = await result;
 
-            var asin = UrlValidator.GetAsin(amazonURL);
-
-            if (asin.IsNullOrWhiteSpace())
+            if (!UrlValidator.IsCountryFromUrlAllowed(amazonUrl))
             {
-                context.Fail(new Exception("Could not validate the amazon url"));
+                await context.PostAsync("Sorry, we only accept links from amazon.com");
+                context.Wait(this.MessageReceivedAsync);
+            }
+            //Not the best way to handle exception, but I don't know any other way.
+            else
+            {
+
+
+                var asin = UrlValidator.GetAsin(amazonUrl);
+
+                if (asin.IsNullOrWhiteSpace())
+                {
+                    await context.PostAsync("Could not validate the amazon url");
+                    context.Wait(this.MessageReceivedAsync);
+                }
+                //Not the best way to handle exception, but I don't know any other way.
+                else
+                {
+                    var message = context.MakeMessage();
+                    var item = _amazonClient.GetDeal(asin);
+
+                    message.Attachments.Add(CreateDealCard(item));
+
+
+                    var data = JsonConvert.SerializeObject(_cookie);
+
+                    //TODO: Using name is probably not very safe..
+                    var user = _userRepo.Find(x => x.Name == _cookie.UserName).FirstOrDefault();
+                    if (user == null)
+                    {
+
+                        _userRepo.Create(new User
+                        {
+                            ResumptionCookie = data,
+                            Name = _cookie.UserName,
+                            Deals = new List<Deal> {item}
+                        });
+                    }
+                    else
+                    {
+                        user.Deals.Add(item);
+                        user.ResumptionCookie = data;
+                        _userRepo.Update(user);
+                    }
+
+
+                    await context.PostAsync(message);
+                }
+
             }
 
-            var message = context.MakeMessage();
-            var item = _amazonClient.GetDeal(asin);
-
-            message.Attachments.Add(CreateDealCard(item));
-
-            await context.PostAsync(message);
-
-            var data = JsonConvert.SerializeObject(_cookie);
-
-            _userRepo.Create(new User
-            {
-                ResumptionCookie = data,
-                Name = _cookie.UserName,
-                Deals = new List<Deal> { item }
-            });
-
             //TODO: Where should the dialog go from here?
-            context.Wait(this.MessageReceivedAsync);
+            //context.Wait(this.MessageReceivedAsync);
         }
 
         private static Attachment CreateDealCard(Deal deal)
         {
             var imgUrl = string.Format(Constants.Amazon.FlakyImageUrlPattern, deal.Code);
+            return GetHeroCard(
+                deal.Name,
+                $"Currently sells for {deal.Price}$",
+                "We will monitor your item and notify you when it becomes discounted",
+                new CardImage(url: imgUrl),
+                new CardAction(ActionTypes.OpenUrl, "View item", value: deal.ShortenUrl));
+        }
+
+        private static Attachment GetHeroCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
+        {
             var heroCard = new HeroCard
             {
-                Title = deal.Name,
-                Subtitle = $"Currently sells for {deal.Price}$",
-                Text = "We will monitor your item and notify you when it becomes discounted",
-                Images = new List<CardImage> { new CardImage(imgUrl) },
-                Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "View item", value: deal.ShortenUrl) }
+                Title = title,
+                Subtitle = subtitle,
+                Text = text,
+                Images = new List<CardImage>() { cardImage },
+                Buttons = new List<CardAction>() { cardAction },
             };
 
             return heroCard.ToAttachment();
         }
+
+        public IList<Attachment> GetCardsAttachments(List<Deal> userDeals)
+        {
+            var attachements = new List<Attachment>();
+            foreach (var deal in userDeals.Where(x => x.IsActive))
+            {
+                attachements.Add(CreateDealCard(deal));
+            }
+
+            return attachements;
+        }
+
 
     }
 }
