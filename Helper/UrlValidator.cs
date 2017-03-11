@@ -23,9 +23,15 @@ namespace BargainBot.Helper
 
         public static bool IsCountryFromUrlAllowed(string url)
         {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                return false;
+            }
+
             var urlBuilder = new UriBuilder(url);
             var host = urlBuilder.Host;
 
+            //TODO: Support other domains
             if (host.Split('.').Last() != "com")
             {
                 return false;

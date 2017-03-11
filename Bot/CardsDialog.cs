@@ -45,7 +45,7 @@ namespace BargainBot.Bot
             {
                 var liveUserDeals = _userRepo.Get().FirstOrDefault(x => x.Name == context.Activity.From.Name);
 
-                if (liveUserDeals?.Deals.Count == 0)
+                if (liveUserDeals == null)
                 {
                     var noDealReply = context.MakeMessage();
                     noDealReply.Text = "No deals found";
@@ -85,8 +85,6 @@ namespace BargainBot.Bot
             //Not the best way to handle exception, but I don't know any other way.
             else
             {
-
-
                 var asin = UrlValidator.GetAsin(amazonUrl);
 
                 if (asin.IsNullOrWhiteSpace())
@@ -129,8 +127,6 @@ namespace BargainBot.Bot
                 }
 
             }
-
-            //TODO: Where should the dialog go from here?
             //context.Wait(this.MessageReceivedAsync);
         }
 
