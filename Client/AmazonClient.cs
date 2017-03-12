@@ -41,6 +41,8 @@ namespace BargainBot.Client
             var amazonItem = _awsProductApiClient.ItemLookupByAsin(asin);
 
             var shortenedAndTaggedUrl = _bitlyClient.ShortenAndAddTagToUrl(amazonItem.DetailPageURL);
+            var sanOfferPrice = amazonItem.OfferPrice ?? 0;
+            double sanitzedPrice = sanOfferPrice == 0 ? (amazonItem.ListPrice ?? 0) : sanOfferPrice;
 
             return new Deal
             {
@@ -48,7 +50,7 @@ namespace BargainBot.Client
                 Name = amazonItem.ItemAttributes.FirstOrDefault(x => x.Key.Equals(Constants.Amazon.ItemAttribute.Title)).Value,
                 Code = amazonItem.ASIN,
                 //TODO: Sometimes the offer price is null?
-                Price = amazonItem.OfferPrice ?? amazonItem.ListPrice,
+                Price = sanitzedPrice,
                 DateCreated = DateTime.UtcNow,
                 ShortenUrl = shortenedAndTaggedUrl,
                 ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault(x => x.Type == AwsImageType.MediumImage)?.URL,

@@ -41,19 +41,19 @@ namespace BargainBot.Jobs
             foreach (var liveDeal in liveDeals)
             {
                 //var updatedDeal = (Deal)liveDeal.Clone();
-                var updatedDeal = _amazonClient.GetDeal(liveDeal.Code);
+                //var updatedDeal = _amazonClient.GetDeal(liveDeal.Code);
+                var updatedDeal = (liveDeal.Price - 1);
 
                 // Check to see if cheaper
-                if ((liveDeal.Price - 1) < liveDeal.Price)
+                if (updatedDeal < liveDeal.Price)
                 {
                     var users = _userRepo.Get().Where(x => x.Deals.Any(y => y.Code == liveDeal.Code));
 
                     foreach (var user in users)
                     {
-                        //uhhh...
                         try
                         {
-                            await CreateDialogHelper.CreateDialogFromCookie(user.ResumptionCookie);
+                            await DialogHelper.CreateDialogFromCookie(user, liveDeal, updatedDeal);
                         }
                         catch (Exception e)
                         {

@@ -56,7 +56,7 @@ namespace BargainBot.Bot
                     var reply = context.MakeMessage();
 
                     reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-                    reply.Attachments = GetCardsAttachments(liveUserDeals.Deals);
+                    reply.Attachments = DialogHelper.GetCardsAttachments(liveUserDeals.Deals);
 
                     await context.PostAsync(reply);
                 }
@@ -98,7 +98,7 @@ namespace BargainBot.Bot
                     var message = context.MakeMessage();
                     var item = _amazonClient.GetDeal(asin);
 
-                    message.Attachments.Add(CreateDealCard(item));
+                    message.Attachments.Add(DialogHelper.CreateDealCard(item));
 
 
                     var data = JsonConvert.SerializeObject(_cookie);
@@ -129,43 +129,6 @@ namespace BargainBot.Bot
             }
             //context.Wait(this.MessageReceivedAsync);
         }
-
-        private static Attachment CreateDealCard(Deal deal)
-        {
-            var imgUrl = string.Format(Constants.Amazon.FlakyImageUrlPattern, deal.Code);
-            return GetHeroCard(
-                deal.Name,
-                $"Currently sells for {deal.Price}$",
-                "We will monitor your item and notify you when it becomes discounted",
-                new CardImage(url: imgUrl),
-                new CardAction(ActionTypes.OpenUrl, "View item", value: deal.ShortenUrl));
-        }
-
-        private static Attachment GetHeroCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
-        {
-            var heroCard = new HeroCard
-            {
-                Title = title,
-                Subtitle = subtitle,
-                Text = text,
-                Images = new List<CardImage>() { cardImage },
-                Buttons = new List<CardAction>() { cardAction },
-            };
-
-            return heroCard.ToAttachment();
-        }
-
-        public IList<Attachment> GetCardsAttachments(List<Deal> userDeals)
-        {
-            var attachements = new List<Attachment>();
-            foreach (var deal in userDeals.Where(x => x.IsActive))
-            {
-                attachements.Add(CreateDealCard(deal));
-            }
-
-            return attachements;
-        }
-
 
     }
 }
