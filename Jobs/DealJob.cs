@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using BargainBot.Bot;
 using BargainBot.Client;
+using BargainBot.Helper;
 using BargainBot.Model;
 using BargainBot.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +47,7 @@ namespace BargainBot.Jobs
                 // Check to see if cheaper
                 if (updatedDeal < liveDeal.Price)
                 {
+                    //var users = await _userRepo.FindAsync().Include(x => x.Deals).Where(x => x.Deals.Any(y => y.Code == liveDeal.Code && y.IsActive)).ToListAsync();
                     var users = await _userRepo.FindAsync().ToListAsync();
                     var filteredUsers = users.Where(x => x.Deals.Any(y => y.Code == liveDeal.Code && y.IsActive));
 

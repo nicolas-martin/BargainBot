@@ -17,14 +17,14 @@ namespace BargainBot.Helper
             public static readonly string AssociateTag = ConfigurationManager.AppSettings["AmazonAssociateTag"];
 
             //TODO: Find a more reliable way to get these.
-            public static readonly string FlakyImageUrlPattern = "http://images.amazon.com/images/P/{0}.01._SCMZZZZZZZ_.jpg";
+            public const string FlakyImageUrlPattern = "http://images.amazon.com/images/P/{0}.01._SCMZZZZZZZ_.jpg";
 
-            public static readonly string ImagePattern2 = "http://images.amazon.com/images/I/{0}";
+            public const string ImagePattern2 = "http://images.amazon.com/images/I/{0}";
 
             public static class ItemAttribute
             {
-                public static readonly string Title = "Title";
-                public static readonly string Feature = "Feature";
+                public const string Title = "Title";
+                public const string Feature = "Feature";
             }
         }
     }

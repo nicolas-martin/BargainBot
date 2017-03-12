@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BargainBot.Helper;
 using BargainBot.Model;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
 
-namespace BargainBot.Bot
+namespace BargainBot.Helper
 {
     public static class DialogHelper
     {

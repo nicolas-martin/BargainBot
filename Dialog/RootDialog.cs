@@ -12,17 +12,19 @@ using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
 using Quartz.Util;
 
-namespace BargainBot.Bot
+namespace BargainBot.Dialog
 {
     [Serializable]
-    public class CardsDialog : IDialog<object>
+    public class RootDialog : IDialog<object>
     {
+        private readonly IBargainBotDialogFactory _dialogFactory;
         private readonly IRepository<User> _userRepo;
         private readonly AmazonClient _amazonClient;
         private ResumptionCookie _cookie;
 
-        public CardsDialog(IRepository<User> userRepo, AmazonClient amazonClient)
+        public RootDialog(IBargainBotDialogFactory dialogFactory,IRepository<User> userRepo, AmazonClient amazonClient)
         {
+            _dialogFactory = dialogFactory;
             _userRepo = userRepo;
             _amazonClient = amazonClient;
             _cookie = null;

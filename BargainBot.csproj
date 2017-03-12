@@ -291,8 +291,11 @@
   <ItemGroup>
     <Compile Include="Client\AmazonClient.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Bot\CardsDialog.cs" />
-    <Compile Include="Bot\DialogHelper.cs" />
+    <Compile Include="Dialog\BargainBotDialogFactory.cs" />
+    <Compile Include="Dialog\RootDialog.cs" />
+    <Compile Include="Dialog\DialogFactoryBase.cs" />
+    <Compile Include="Dialog\IDialogFactory.cs" />
+    <Compile Include="Helper\DialogHelper.cs" />
     <Compile Include="Client\BitlyClient.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Global.asax.cs">

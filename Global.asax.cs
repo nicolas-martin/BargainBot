@@ -2,8 +2,8 @@
 using System.Web.Http;
 using Autofac;
 using Autofac.Core;
-using BargainBot.Bot;
 using BargainBot.Client;
+using BargainBot.Dialog;
 using BargainBot.Jobs;
 using BargainBot.Model;
 using BargainBot.Repositories;
@@ -43,6 +43,14 @@ namespace BargainBot
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<BargainBotDialogFactory>()
+                .Keyed<IBargainBotDialogFactory>(FiberModule.Key_DoNotSerialize)
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            //builder.RegisterType<BouquetsDialog>()
+            //    .InstancePerDependency();
+
             builder.RegisterType<MyContext>()
                 .As<MyContext>()
                 .InstancePerLifetimeScope();
@@ -58,7 +66,7 @@ namespace BargainBot
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<CardsDialog>()
+            builder.RegisterType<RootDialog>()
                 .As<IDialog<object>>()
                 .InstancePerDependency();
 
