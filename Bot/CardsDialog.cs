@@ -120,17 +120,24 @@ namespace BargainBot.Bot
                     else
                     {
                         Debug.WriteLine($"Existing user. Updating {user.Name} with {item.Name}");
-                        user.Deals.Add(item);
-                        user.ResumptionCookie = data;
-                        _userRepo.Update(user);
-                    }
+                        if (user.Deals.All(x => x.Code != item.Code))
+                        {
+                            user.Deals.Add(item);
+                            user.ResumptionCookie = data;
+                            _userRepo.Update(user);
+                        }
+                        else
+                        {
+                            await context.PostAsync($"Already tracking {item.Name}");
+                            context.Wait(this.MessageReceivedAsync);
+                        }
 
+                    }
 
                     await context.PostAsync(message);
                 }
 
             }
-            //context.Wait(this.MessageReceivedAsync);
         }
 
     }

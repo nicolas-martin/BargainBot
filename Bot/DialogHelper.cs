@@ -45,17 +45,18 @@ namespace BargainBot.Bot
             var client = new ConnectorClient(new Uri(messageactivity.ServiceUrl));
 
             var reply = messageactivity.CreateReply();
-            reply.Text = $"Hey {userName} ({userId})! I have more *exciting news*! Come back!";
+            //reply.Text = $"Hey {userName} ({userId})! I have more *exciting news*! Come back!";
 
-            var pctDiscount = (updatedDeal / deal.Price).ToString("0.0%");
+            var pctDiscount = (1 - (updatedDeal / deal.Price)).ToString("0.0%");
 
             reply.Attachments.Add(GetHeroCard(
                 deal.Name,
-                $"{deal.Name} is now cheaper!",
-                $"You save {pctDiscount}",
+                $"Discount found!",
+                $"You save {pctDiscount} by buying now",
                 new CardImage(url: string.Format(Constants.Amazon.FlakyImageUrlPattern, deal.Code)),
                 new CardAction(ActionTypes.OpenUrl, "Buy now", value: deal.ShortenUrl)));
 
+            //TODO: Is it possible to use a dialog here?
             //await client.Conversations.ReplyToActivityAsync(reply);
             var newConvo = await client.Conversations.CreateDirectConversationAsync(messageactivity.Recipient, messageactivity.From, reply);
             messageactivity.Conversation.Id = newConvo.Id;
@@ -64,8 +65,6 @@ namespace BargainBot.Bot
 
         public static Attachment CreateDealCard(Deal deal)
         {
-            //var imgUrl = string.Format(Constants.Amazon.FlakyImageUrlPattern, deal.Code);
-
             return GetHeroCard(
                 deal.Name,
                 $"Currently sells for {deal.Price}$",

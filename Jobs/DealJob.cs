@@ -41,14 +41,14 @@ namespace BargainBot.Jobs
             foreach (var liveDeal in liveDeals)
             {
                 //var updatedDeal = (Deal)liveDeal.Clone();
-                var updatedDeal = _amazonClient.GetPriceByAsin(liveDeal.Code);
-                //var updatedDeal = (liveDeal.Price - 1);
+                //var updatedDeal = _amazonClient.GetPriceByAsin(liveDeal.Code);
+                var updatedDeal = (liveDeal.Price - 1.00);
 
                 // Check to see if cheaper
                 if (updatedDeal < liveDeal.Price)
                 {
-                    var users = _userRepo.FindAsync();
-                    var filteredUsers = users.Where(x => x.Deals.Any(y => y.Code == liveDeal.Code));
+                    var users = await _userRepo.FindAsync().ToListAsync();
+                    var filteredUsers = users.Where(x => x.Deals.Any(y => y.Code == liveDeal.Code && y.IsActive));
 
                     foreach (var user in filteredUsers)
                     {
