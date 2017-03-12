@@ -12,7 +12,7 @@ namespace BargainBot.Repositories
         void Update(T obj);
         void Delete(Guid id);
         IEnumerable<T> Find(Func<T, bool> predicate);
-        IQueryable<T> FindAsync(Func<T, bool> predicate);
+        IQueryable<T> FindAsync();
         PagedResult<T> RetrievePage(int pageNumber, int pageSize, Func<T, bool> predicate = default(Func<T, bool>));
     }
 }

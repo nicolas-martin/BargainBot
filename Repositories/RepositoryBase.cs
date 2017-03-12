@@ -67,7 +67,7 @@ namespace BargainBot.Repositories
             return _context.Set<T>().Where(predicate);
         }
 
-        public IQueryable<T> FindAsync(Func<T, bool> predicate)
+        public IQueryable<T> FindAsync()
         {
             return _context.Set<T>();
         }

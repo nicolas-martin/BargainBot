@@ -19,6 +19,8 @@ namespace BargainBot.Helper
             //TODO: Find a more reliable way to get these.
             public static readonly string FlakyImageUrlPattern = "http://images.amazon.com/images/P/{0}.01._SCMZZZZZZZ_.jpg";
 
+            public static readonly string ImagePattern2 = "http://images.amazon.com/images/I/{0}";
+
             public static class ItemAttribute
             {
                 public static readonly string Title = "Title";

@@ -27,29 +27,30 @@ namespace BargainBot.Jobs
 
         void IJob.Execute(IJobExecutionContext context)
         {
-
             //var obj = context.JobDetail.JobDataMap["k"];
             Debug.WriteLine("Parsing deals.");
             NewMethod();
-
         }
 
         private async void NewMethod()
         {
-            var liveDeals = await _dealRepo.FindAsync(x => x.IsActive).ToListAsync();
+            var deals = await _dealRepo.FindAsync().ToListAsync();
+
+            var liveDeals = deals.Where(x => x.IsActive);
 
             foreach (var liveDeal in liveDeals)
             {
                 //var updatedDeal = (Deal)liveDeal.Clone();
-                //var updatedDeal = _amazonClient.GetDeal(liveDeal.Code);
-                var updatedDeal = (liveDeal.Price - 1);
+                var updatedDeal = _amazonClient.GetPriceByAsin(liveDeal.Code);
+                //var updatedDeal = (liveDeal.Price - 1);
 
                 // Check to see if cheaper
                 if (updatedDeal < liveDeal.Price)
                 {
-                    var users = _userRepo.Get().Where(x => x.Deals.Any(y => y.Code == liveDeal.Code));
+                    var users = _userRepo.FindAsync();
+                    var filteredUsers = users.Where(x => x.Deals.Any(y => y.Code == liveDeal.Code));
 
-                    foreach (var user in users)
+                    foreach (var user in filteredUsers)
                     {
                         try
                         {
@@ -57,7 +58,7 @@ namespace BargainBot.Jobs
                         }
                         catch (Exception e)
                         {
-                            Debug.WriteLine(e);
+                            Debug.WriteLine($"==Error while creating dialog from cookie\r\n {e}");
                         }
                     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BargainBot.Client;
@@ -100,23 +101,25 @@ namespace BargainBot.Bot
 
                     message.Attachments.Add(DialogHelper.CreateDealCard(item));
 
-
                     var data = JsonConvert.SerializeObject(_cookie);
 
-                    //TODO: Using name is probably not very safe..
+                    //TODO: Using name is probably not very safe.. 
+                    //Use internalId instead?
                     var user = _userRepo.Find(x => x.Name == _cookie.UserName).FirstOrDefault();
                     if (user == null)
                     {
-
+                        Debug.WriteLine($"New user. Creating {_cookie.UserName} with {item.Name}");
                         _userRepo.Create(new User
                         {
                             ResumptionCookie = data,
                             Name = _cookie.UserName,
+                            InternalId = context.Activity.From.Id,
                             Deals = new List<Deal> {item}
                         });
                     }
                     else
                     {
+                        Debug.WriteLine($"Existing user. Updating {user.Name} with {item.Name}");
                         user.Deals.Add(item);
                         user.ResumptionCookie = data;
                         _userRepo.Update(user);

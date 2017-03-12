@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using BargainBot.Helper;
 using BargainBot.Model;
@@ -31,9 +32,12 @@ namespace BargainBot.Client
             });
         }
 
-        public double? GetPriceByAsin(string asin)
+        public double GetPriceByAsin(string asin)
         {
-            return _awsProductApiClient.ItemLookupByAsin(asin).OfferPrice;
+            var itemLookupByAsin = _awsProductApiClient.ItemLookupByAsin(asin);
+            var sanOfferPrice = itemLookupByAsin.OfferPrice ?? 0.00;
+            double sanitzedPrice = sanOfferPrice == 0.00 ? (itemLookupByAsin.ListPrice ?? 0) : sanOfferPrice;
+            return sanitzedPrice;
         }
 
         public Deal GetDeal(string asin)
@@ -41,19 +45,23 @@ namespace BargainBot.Client
             var amazonItem = _awsProductApiClient.ItemLookupByAsin(asin);
 
             var shortenedAndTaggedUrl = _bitlyClient.ShortenAndAddTagToUrl(amazonItem.DetailPageURL);
-            var sanOfferPrice = amazonItem.OfferPrice ?? 0;
-            double sanitzedPrice = sanOfferPrice == 0 ? (amazonItem.ListPrice ?? 0) : sanOfferPrice;
+
+            //TODO: Sometimes the offer price is null?
+            var sanOfferPrice = amazonItem.OfferPrice ?? 0.00;
+            double sanitzedPrice = sanOfferPrice == 0.00 ? (amazonItem.ListPrice ?? 0) : sanOfferPrice;
+
+            var initialUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault(x => x.Type == AwsImageType.MediumImage)?.URL;
+            var imageCode = initialUrl.Split('/').Last();
 
             return new Deal
             {
                 Id = Guid.NewGuid(),
                 Name = amazonItem.ItemAttributes.FirstOrDefault(x => x.Key.Equals(Constants.Amazon.ItemAttribute.Title)).Value,
                 Code = amazonItem.ASIN,
-                //TODO: Sometimes the offer price is null?
                 Price = sanitzedPrice,
                 DateCreated = DateTime.UtcNow,
                 ShortenUrl = shortenedAndTaggedUrl,
-                ImageUrl = amazonItem.PrimaryImageSet.Images.FirstOrDefault(x => x.Type == AwsImageType.MediumImage)?.URL,
+                ImageUrl = string.Format(Constants.Amazon.ImagePattern2, imageCode),
                 IsActive = true
             };
         }
