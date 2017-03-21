@@ -29,13 +29,14 @@ namespace BargainBot
             builder.Update(Conversation.Container);
 #pragma warning restore 612, 618
 
-            var myScheduler = Conversation.Container.Resolve<JobScheduler>();
-
             using (var context = new MyContext())
             {
                 var isCreated = context.Database.EnsureCreated();
                 Debug.WriteLine(isCreated ? "Database created" : "Database exists");
             }
+
+            var myScheduler = Conversation.Container.Resolve<JobScheduler>();
+
         }
     }
 

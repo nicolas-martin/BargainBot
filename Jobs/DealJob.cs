@@ -41,8 +41,8 @@ namespace BargainBot.Jobs
             foreach (var liveDeal in liveDeals)
             {
                 //var updatedDeal = (Deal)liveDeal.Clone();
-                //var updatedDeal = _amazonClient.GetPriceByAsin(liveDeal.Code);
-                var updatedDeal = (liveDeal.Price - 1.00);
+                var updatedDeal = _amazonClient.GetPriceByAsin(liveDeal.Code);
+                //var updatedDeal = (liveDeal.Price - 1.00);
 
                 // Check to see if cheaper
                 if (updatedDeal < liveDeal.Price)

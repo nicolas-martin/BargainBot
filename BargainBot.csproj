@@ -319,6 +319,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="connections.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="keys.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,5 @@
-﻿using BargainBot.Model;
+﻿using System.Configuration;
+using BargainBot.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace BargainBot.Repositories
@@ -7,10 +8,11 @@ namespace BargainBot.Repositories
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Deal> Deals { get; set; }
+        private readonly string _mysqlConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(@"Server=localhost;database=bb;uid=root;pwd=1234;");
+            optionsBuilder.UseMySql(_mysqlConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
